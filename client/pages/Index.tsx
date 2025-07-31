@@ -1,13 +1,13 @@
-import { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Badge } from '@/components/ui/badge';
-import { Separator } from '@/components/ui/separator';
-import { Plus, Download, Eye, Trash2, Edit } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
+import { Plus, Download, Eye, Trash2, Edit } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface PersonalInfo {
   fullName: string;
@@ -42,19 +42,21 @@ interface Education {
 interface Skill {
   id: string;
   name: string;
-  level: 'Beginner' | 'Intermediate' | 'Advanced' | 'Expert';
+  level: "Beginner" | "Intermediate" | "Advanced" | "Expert";
 }
 
 export default function Index() {
-  const [activeTab, setActiveTab] = useState<'personal' | 'experience' | 'education' | 'skills' | 'preview'>('personal');
+  const [activeTab, setActiveTab] = useState<
+    "personal" | "experience" | "education" | "skills" | "preview"
+  >("personal");
   const [personalInfo, setPersonalInfo] = useState<PersonalInfo>({
-    fullName: '',
-    email: '',
-    phone: '',
-    location: '',
-    website: '',
-    linkedin: '',
-    summary: ''
+    fullName: "",
+    email: "",
+    phone: "",
+    location: "",
+    website: "",
+    linkedin: "",
+    summary: "",
   });
   const [experiences, setExperiences] = useState<Experience[]>([]);
   const [education, setEducation] = useState<Education[]>([]);
@@ -63,80 +65,100 @@ export default function Index() {
   const addExperience = () => {
     const newExp: Experience = {
       id: Date.now().toString(),
-      company: '',
-      position: '',
-      startDate: '',
-      endDate: '',
+      company: "",
+      position: "",
+      startDate: "",
+      endDate: "",
       current: false,
-      description: ''
+      description: "",
     };
     setExperiences([...experiences, newExp]);
   };
 
-  const updateExperience = (id: string, field: keyof Experience, value: any) => {
-    setExperiences(experiences.map(exp => 
-      exp.id === id ? { ...exp, [field]: value } : exp
-    ));
+  const updateExperience = (
+    id: string,
+    field: keyof Experience,
+    value: any,
+  ) => {
+    setExperiences(
+      experiences.map((exp) =>
+        exp.id === id ? { ...exp, [field]: value } : exp,
+      ),
+    );
   };
 
   const removeExperience = (id: string) => {
-    setExperiences(experiences.filter(exp => exp.id !== id));
+    setExperiences(experiences.filter((exp) => exp.id !== id));
   };
 
   const addEducation = () => {
     const newEdu: Education = {
       id: Date.now().toString(),
-      school: '',
-      degree: '',
-      field: '',
-      startDate: '',
-      endDate: '',
-      gpa: ''
+      school: "",
+      degree: "",
+      field: "",
+      startDate: "",
+      endDate: "",
+      gpa: "",
     };
     setEducation([...education, newEdu]);
   };
 
   const updateEducation = (id: string, field: keyof Education, value: any) => {
-    setEducation(education.map(edu => 
-      edu.id === id ? { ...edu, [field]: value } : edu
-    ));
+    setEducation(
+      education.map((edu) =>
+        edu.id === id ? { ...edu, [field]: value } : edu,
+      ),
+    );
   };
 
   const removeEducation = (id: string) => {
-    setEducation(education.filter(edu => edu.id !== id));
+    setEducation(education.filter((edu) => edu.id !== id));
   };
 
   const addSkill = () => {
     const newSkill: Skill = {
       id: Date.now().toString(),
-      name: '',
-      level: 'Intermediate'
+      name: "",
+      level: "Intermediate",
     };
     setSkills([...skills, newSkill]);
   };
 
   const updateSkill = (id: string, field: keyof Skill, value: any) => {
-    setSkills(skills.map(skill => 
-      skill.id === id ? { ...skill, [field]: value } : skill
-    ));
+    setSkills(
+      skills.map((skill) =>
+        skill.id === id ? { ...skill, [field]: value } : skill,
+      ),
+    );
   };
 
   const removeSkill = (id: string) => {
-    setSkills(skills.filter(skill => skill.id !== id));
+    setSkills(skills.filter((skill) => skill.id !== id));
   };
 
   const exportResume = () => {
     window.print();
   };
 
-  const TabButton = ({ id, label, isActive, onClick }: { id: string; label: string; isActive: boolean; onClick: () => void }) => (
+  const TabButton = ({
+    id,
+    label,
+    isActive,
+    onClick,
+  }: {
+    id: string;
+    label: string;
+    isActive: boolean;
+    onClick: () => void;
+  }) => (
     <button
       onClick={onClick}
       className={cn(
         "px-6 py-3 rounded-lg font-medium transition-all duration-200",
-        isActive 
-          ? "bg-primary text-primary-foreground shadow-md" 
-          : "text-muted-foreground hover:text-foreground hover:bg-muted"
+        isActive
+          ? "bg-primary text-primary-foreground shadow-md"
+          : "text-muted-foreground hover:text-foreground hover:bg-muted",
       )}
     >
       {label}
@@ -154,8 +176,12 @@ export default function Index() {
                 <Edit className="w-6 h-6 text-primary-foreground" />
               </div>
               <div>
-                <h1 className="text-2xl font-bold text-foreground">ResumeForge</h1>
-                <p className="text-sm text-muted-foreground">Professional Resume Builder</p>
+                <h1 className="text-2xl font-bold text-foreground">
+                  ResumeForge
+                </h1>
+                <p className="text-sm text-muted-foreground">
+                  Professional Resume Builder
+                </p>
               </div>
             </div>
             <div className="flex items-center space-x-3">
@@ -163,7 +189,7 @@ export default function Index() {
                 <Download className="w-4 h-4 mr-2" />
                 Export PDF
               </Button>
-              <Button onClick={() => setActiveTab('preview')}>
+              <Button onClick={() => setActiveTab("preview")}>
                 <Eye className="w-4 h-4 mr-2" />
                 Preview
               </Button>
@@ -176,17 +202,42 @@ export default function Index() {
         <div className="max-w-7xl mx-auto">
           {/* Navigation Tabs */}
           <div className="flex space-x-2 mb-8 p-1 bg-white/60 backdrop-blur-sm rounded-xl border">
-            <TabButton id="personal" label="Personal Info" isActive={activeTab === 'personal'} onClick={() => setActiveTab('personal')} />
-            <TabButton id="experience" label="Experience" isActive={activeTab === 'experience'} onClick={() => setActiveTab('experience')} />
-            <TabButton id="education" label="Education" isActive={activeTab === 'education'} onClick={() => setActiveTab('education')} />
-            <TabButton id="skills" label="Skills" isActive={activeTab === 'skills'} onClick={() => setActiveTab('skills')} />
-            <TabButton id="preview" label="Preview" isActive={activeTab === 'preview'} onClick={() => setActiveTab('preview')} />
+            <TabButton
+              id="personal"
+              label="Personal Info"
+              isActive={activeTab === "personal"}
+              onClick={() => setActiveTab("personal")}
+            />
+            <TabButton
+              id="experience"
+              label="Experience"
+              isActive={activeTab === "experience"}
+              onClick={() => setActiveTab("experience")}
+            />
+            <TabButton
+              id="education"
+              label="Education"
+              isActive={activeTab === "education"}
+              onClick={() => setActiveTab("education")}
+            />
+            <TabButton
+              id="skills"
+              label="Skills"
+              isActive={activeTab === "skills"}
+              onClick={() => setActiveTab("skills")}
+            />
+            <TabButton
+              id="preview"
+              label="Preview"
+              isActive={activeTab === "preview"}
+              onClick={() => setActiveTab("preview")}
+            />
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Form Section */}
             <div className="lg:col-span-2">
-              {activeTab === 'personal' && (
+              {activeTab === "personal" && (
                 <Card className="bg-white/60 backdrop-blur-sm">
                   <CardHeader>
                     <CardTitle className="flex items-center space-x-2">
@@ -201,7 +252,12 @@ export default function Index() {
                         <Input
                           id="fullName"
                           value={personalInfo.fullName}
-                          onChange={(e) => setPersonalInfo({...personalInfo, fullName: e.target.value})}
+                          onChange={(e) =>
+                            setPersonalInfo({
+                              ...personalInfo,
+                              fullName: e.target.value,
+                            })
+                          }
                           placeholder="John Doe"
                         />
                       </div>
@@ -211,7 +267,12 @@ export default function Index() {
                           id="email"
                           type="email"
                           value={personalInfo.email}
-                          onChange={(e) => setPersonalInfo({...personalInfo, email: e.target.value})}
+                          onChange={(e) =>
+                            setPersonalInfo({
+                              ...personalInfo,
+                              email: e.target.value,
+                            })
+                          }
                           placeholder="john@example.com"
                         />
                       </div>
@@ -220,7 +281,12 @@ export default function Index() {
                         <Input
                           id="phone"
                           value={personalInfo.phone}
-                          onChange={(e) => setPersonalInfo({...personalInfo, phone: e.target.value})}
+                          onChange={(e) =>
+                            setPersonalInfo({
+                              ...personalInfo,
+                              phone: e.target.value,
+                            })
+                          }
                           placeholder="+1 (555) 123-4567"
                         />
                       </div>
@@ -229,7 +295,12 @@ export default function Index() {
                         <Input
                           id="location"
                           value={personalInfo.location}
-                          onChange={(e) => setPersonalInfo({...personalInfo, location: e.target.value})}
+                          onChange={(e) =>
+                            setPersonalInfo({
+                              ...personalInfo,
+                              location: e.target.value,
+                            })
+                          }
                           placeholder="New York, NY"
                         />
                       </div>
@@ -238,7 +309,12 @@ export default function Index() {
                         <Input
                           id="website"
                           value={personalInfo.website}
-                          onChange={(e) => setPersonalInfo({...personalInfo, website: e.target.value})}
+                          onChange={(e) =>
+                            setPersonalInfo({
+                              ...personalInfo,
+                              website: e.target.value,
+                            })
+                          }
                           placeholder="https://johndoe.com"
                         />
                       </div>
@@ -247,7 +323,12 @@ export default function Index() {
                         <Input
                           id="linkedin"
                           value={personalInfo.linkedin}
-                          onChange={(e) => setPersonalInfo({...personalInfo, linkedin: e.target.value})}
+                          onChange={(e) =>
+                            setPersonalInfo({
+                              ...personalInfo,
+                              linkedin: e.target.value,
+                            })
+                          }
                           placeholder="linkedin.com/in/johndoe"
                         />
                       </div>
@@ -257,7 +338,12 @@ export default function Index() {
                       <Textarea
                         id="summary"
                         value={personalInfo.summary}
-                        onChange={(e) => setPersonalInfo({...personalInfo, summary: e.target.value})}
+                        onChange={(e) =>
+                          setPersonalInfo({
+                            ...personalInfo,
+                            summary: e.target.value,
+                          })
+                        }
                         placeholder="A brief summary of your professional background and career objectives..."
                         rows={4}
                       />
@@ -266,7 +352,7 @@ export default function Index() {
                 </Card>
               )}
 
-              {activeTab === 'experience' && (
+              {activeTab === "experience" && (
                 <Card className="bg-white/60 backdrop-blur-sm">
                   <CardHeader>
                     <div className="flex items-center justify-between">
@@ -282,9 +368,14 @@ export default function Index() {
                   </CardHeader>
                   <CardContent className="space-y-6">
                     {experiences.map((exp, index) => (
-                      <div key={exp.id} className="p-4 border rounded-lg bg-white/40">
+                      <div
+                        key={exp.id}
+                        className="p-4 border rounded-lg bg-white/40"
+                      >
                         <div className="flex items-center justify-between mb-4">
-                          <h3 className="font-semibold">Experience #{index + 1}</h3>
+                          <h3 className="font-semibold">
+                            Experience #{index + 1}
+                          </h3>
                           <Button
                             variant="destructive"
                             size="sm"
@@ -298,7 +389,13 @@ export default function Index() {
                             <Label>Company</Label>
                             <Input
                               value={exp.company}
-                              onChange={(e) => updateExperience(exp.id, 'company', e.target.value)}
+                              onChange={(e) =>
+                                updateExperience(
+                                  exp.id,
+                                  "company",
+                                  e.target.value,
+                                )
+                              }
                               placeholder="Company Name"
                             />
                           </div>
@@ -306,7 +403,13 @@ export default function Index() {
                             <Label>Position</Label>
                             <Input
                               value={exp.position}
-                              onChange={(e) => updateExperience(exp.id, 'position', e.target.value)}
+                              onChange={(e) =>
+                                updateExperience(
+                                  exp.id,
+                                  "position",
+                                  e.target.value,
+                                )
+                              }
                               placeholder="Job Title"
                             />
                           </div>
@@ -315,7 +418,13 @@ export default function Index() {
                             <Input
                               type="month"
                               value={exp.startDate}
-                              onChange={(e) => updateExperience(exp.id, 'startDate', e.target.value)}
+                              onChange={(e) =>
+                                updateExperience(
+                                  exp.id,
+                                  "startDate",
+                                  e.target.value,
+                                )
+                              }
                             />
                           </div>
                           <div>
@@ -323,7 +432,13 @@ export default function Index() {
                             <Input
                               type="month"
                               value={exp.endDate}
-                              onChange={(e) => updateExperience(exp.id, 'endDate', e.target.value)}
+                              onChange={(e) =>
+                                updateExperience(
+                                  exp.id,
+                                  "endDate",
+                                  e.target.value,
+                                )
+                              }
                               disabled={exp.current}
                             />
                             <div className="flex items-center space-x-2 mt-2">
@@ -331,9 +446,20 @@ export default function Index() {
                                 type="checkbox"
                                 id={`current-${exp.id}`}
                                 checked={exp.current}
-                                onChange={(e) => updateExperience(exp.id, 'current', e.target.checked)}
+                                onChange={(e) =>
+                                  updateExperience(
+                                    exp.id,
+                                    "current",
+                                    e.target.checked,
+                                  )
+                                }
                               />
-                              <Label htmlFor={`current-${exp.id}`} className="text-sm">Currently working here</Label>
+                              <Label
+                                htmlFor={`current-${exp.id}`}
+                                className="text-sm"
+                              >
+                                Currently working here
+                              </Label>
                             </div>
                           </div>
                         </div>
@@ -341,7 +467,13 @@ export default function Index() {
                           <Label>Description</Label>
                           <Textarea
                             value={exp.description}
-                            onChange={(e) => updateExperience(exp.id, 'description', e.target.value)}
+                            onChange={(e) =>
+                              updateExperience(
+                                exp.id,
+                                "description",
+                                e.target.value,
+                              )
+                            }
                             placeholder="Describe your responsibilities and achievements..."
                             rows={3}
                           />
@@ -351,14 +483,16 @@ export default function Index() {
                     {experiences.length === 0 && (
                       <div className="text-center py-8 text-muted-foreground">
                         <p>No work experience added yet.</p>
-                        <p className="text-sm">Click "Add Experience" to get started.</p>
+                        <p className="text-sm">
+                          Click "Add Experience" to get started.
+                        </p>
                       </div>
                     )}
                   </CardContent>
                 </Card>
               )}
 
-              {activeTab === 'education' && (
+              {activeTab === "education" && (
                 <Card className="bg-white/60 backdrop-blur-sm">
                   <CardHeader>
                     <div className="flex items-center justify-between">
@@ -374,9 +508,14 @@ export default function Index() {
                   </CardHeader>
                   <CardContent className="space-y-6">
                     {education.map((edu, index) => (
-                      <div key={edu.id} className="p-4 border rounded-lg bg-white/40">
+                      <div
+                        key={edu.id}
+                        className="p-4 border rounded-lg bg-white/40"
+                      >
                         <div className="flex items-center justify-between mb-4">
-                          <h3 className="font-semibold">Education #{index + 1}</h3>
+                          <h3 className="font-semibold">
+                            Education #{index + 1}
+                          </h3>
                           <Button
                             variant="destructive"
                             size="sm"
@@ -390,7 +529,13 @@ export default function Index() {
                             <Label>School/University</Label>
                             <Input
                               value={edu.school}
-                              onChange={(e) => updateEducation(edu.id, 'school', e.target.value)}
+                              onChange={(e) =>
+                                updateEducation(
+                                  edu.id,
+                                  "school",
+                                  e.target.value,
+                                )
+                              }
                               placeholder="University Name"
                             />
                           </div>
@@ -398,7 +543,13 @@ export default function Index() {
                             <Label>Degree</Label>
                             <Input
                               value={edu.degree}
-                              onChange={(e) => updateEducation(edu.id, 'degree', e.target.value)}
+                              onChange={(e) =>
+                                updateEducation(
+                                  edu.id,
+                                  "degree",
+                                  e.target.value,
+                                )
+                              }
                               placeholder="Bachelor's, Master's, etc."
                             />
                           </div>
@@ -406,7 +557,9 @@ export default function Index() {
                             <Label>Field of Study</Label>
                             <Input
                               value={edu.field}
-                              onChange={(e) => updateEducation(edu.id, 'field', e.target.value)}
+                              onChange={(e) =>
+                                updateEducation(edu.id, "field", e.target.value)
+                              }
                               placeholder="Computer Science, etc."
                             />
                           </div>
@@ -414,7 +567,9 @@ export default function Index() {
                             <Label>GPA (Optional)</Label>
                             <Input
                               value={edu.gpa}
-                              onChange={(e) => updateEducation(edu.id, 'gpa', e.target.value)}
+                              onChange={(e) =>
+                                updateEducation(edu.id, "gpa", e.target.value)
+                              }
                               placeholder="3.8/4.0"
                             />
                           </div>
@@ -423,7 +578,13 @@ export default function Index() {
                             <Input
                               type="month"
                               value={edu.startDate}
-                              onChange={(e) => updateEducation(edu.id, 'startDate', e.target.value)}
+                              onChange={(e) =>
+                                updateEducation(
+                                  edu.id,
+                                  "startDate",
+                                  e.target.value,
+                                )
+                              }
                             />
                           </div>
                           <div>
@@ -431,7 +592,13 @@ export default function Index() {
                             <Input
                               type="month"
                               value={edu.endDate}
-                              onChange={(e) => updateEducation(edu.id, 'endDate', e.target.value)}
+                              onChange={(e) =>
+                                updateEducation(
+                                  edu.id,
+                                  "endDate",
+                                  e.target.value,
+                                )
+                              }
                             />
                           </div>
                         </div>
@@ -440,14 +607,16 @@ export default function Index() {
                     {education.length === 0 && (
                       <div className="text-center py-8 text-muted-foreground">
                         <p>No education added yet.</p>
-                        <p className="text-sm">Click "Add Education" to get started.</p>
+                        <p className="text-sm">
+                          Click "Add Education" to get started.
+                        </p>
                       </div>
                     )}
                   </CardContent>
                 </Card>
               )}
 
-              {activeTab === 'skills' && (
+              {activeTab === "skills" && (
                 <Card className="bg-white/60 backdrop-blur-sm">
                   <CardHeader>
                     <div className="flex items-center justify-between">
@@ -463,17 +632,24 @@ export default function Index() {
                   </CardHeader>
                   <CardContent className="space-y-4">
                     {skills.map((skill, index) => (
-                      <div key={skill.id} className="flex items-center space-x-4 p-3 border rounded-lg bg-white/40">
+                      <div
+                        key={skill.id}
+                        className="flex items-center space-x-4 p-3 border rounded-lg bg-white/40"
+                      >
                         <div className="flex-1">
                           <Input
                             value={skill.name}
-                            onChange={(e) => updateSkill(skill.id, 'name', e.target.value)}
+                            onChange={(e) =>
+                              updateSkill(skill.id, "name", e.target.value)
+                            }
                             placeholder="Skill name (e.g., Python, React, etc.)"
                           />
                         </div>
                         <select
                           value={skill.level}
-                          onChange={(e) => updateSkill(skill.id, 'level', e.target.value)}
+                          onChange={(e) =>
+                            updateSkill(skill.id, "level", e.target.value)
+                          }
                           className="px-3 py-2 border rounded-md bg-white"
                         >
                           <option value="Beginner">Beginner</option>
@@ -493,7 +669,9 @@ export default function Index() {
                     {skills.length === 0 && (
                       <div className="text-center py-8 text-muted-foreground">
                         <p>No skills added yet.</p>
-                        <p className="text-sm">Click "Add Skill" to get started.</p>
+                        <p className="text-sm">
+                          Click "Add Skill" to get started.
+                        </p>
                       </div>
                     )}
                   </CardContent>
@@ -516,14 +694,20 @@ export default function Index() {
                       {/* Personal Info */}
                       <div className="text-center">
                         <h1 className="text-2xl font-bold text-foreground">
-                          {personalInfo.fullName || 'Your Name'}
+                          {personalInfo.fullName || "Your Name"}
                         </h1>
                         <div className="text-muted-foreground space-y-1 mt-2">
                           {personalInfo.email && <p>{personalInfo.email}</p>}
                           {personalInfo.phone && <p>{personalInfo.phone}</p>}
-                          {personalInfo.location && <p>{personalInfo.location}</p>}
-                          {personalInfo.website && <p>{personalInfo.website}</p>}
-                          {personalInfo.linkedin && <p>{personalInfo.linkedin}</p>}
+                          {personalInfo.location && (
+                            <p>{personalInfo.location}</p>
+                          )}
+                          {personalInfo.website && (
+                            <p>{personalInfo.website}</p>
+                          )}
+                          {personalInfo.linkedin && (
+                            <p>{personalInfo.linkedin}</p>
+                          )}
                         </div>
                       </div>
 
@@ -531,8 +715,12 @@ export default function Index() {
                         <>
                           <Separator />
                           <div>
-                            <h2 className="font-semibold text-foreground mb-2">SUMMARY</h2>
-                            <p className="text-muted-foreground">{personalInfo.summary}</p>
+                            <h2 className="font-semibold text-foreground mb-2">
+                              SUMMARY
+                            </h2>
+                            <p className="text-muted-foreground">
+                              {personalInfo.summary}
+                            </p>
                           </div>
                         </>
                       )}
@@ -541,21 +729,30 @@ export default function Index() {
                         <>
                           <Separator />
                           <div>
-                            <h2 className="font-semibold text-foreground mb-3">EXPERIENCE</h2>
+                            <h2 className="font-semibold text-foreground mb-3">
+                              EXPERIENCE
+                            </h2>
                             <div className="space-y-4">
                               {experiences.map((exp) => (
                                 <div key={exp.id}>
                                   <div className="flex justify-between items-start">
                                     <div>
-                                      <h3 className="font-medium">{exp.position}</h3>
-                                      <p className="text-primary">{exp.company}</p>
+                                      <h3 className="font-medium">
+                                        {exp.position}
+                                      </h3>
+                                      <p className="text-primary">
+                                        {exp.company}
+                                      </p>
                                     </div>
                                     <p className="text-muted-foreground text-xs">
-                                      {exp.startDate} - {exp.current ? 'Present' : exp.endDate}
+                                      {exp.startDate} -{" "}
+                                      {exp.current ? "Present" : exp.endDate}
                                     </p>
                                   </div>
                                   {exp.description && (
-                                    <p className="text-muted-foreground mt-1">{exp.description}</p>
+                                    <p className="text-muted-foreground mt-1">
+                                      {exp.description}
+                                    </p>
                                   )}
                                 </div>
                               ))}
@@ -568,15 +765,25 @@ export default function Index() {
                         <>
                           <Separator />
                           <div>
-                            <h2 className="font-semibold text-foreground mb-3">EDUCATION</h2>
+                            <h2 className="font-semibold text-foreground mb-3">
+                              EDUCATION
+                            </h2>
                             <div className="space-y-3">
                               {education.map((edu) => (
                                 <div key={edu.id}>
                                   <div className="flex justify-between items-start">
                                     <div>
-                                      <h3 className="font-medium">{edu.degree} in {edu.field}</h3>
-                                      <p className="text-primary">{edu.school}</p>
-                                      {edu.gpa && <p className="text-muted-foreground text-xs">GPA: {edu.gpa}</p>}
+                                      <h3 className="font-medium">
+                                        {edu.degree} in {edu.field}
+                                      </h3>
+                                      <p className="text-primary">
+                                        {edu.school}
+                                      </p>
+                                      {edu.gpa && (
+                                        <p className="text-muted-foreground text-xs">
+                                          GPA: {edu.gpa}
+                                        </p>
+                                      )}
                                     </div>
                                     <p className="text-muted-foreground text-xs">
                                       {edu.startDate} - {edu.endDate}
@@ -593,12 +800,20 @@ export default function Index() {
                         <>
                           <Separator />
                           <div>
-                            <h2 className="font-semibold text-foreground mb-3">SKILLS</h2>
+                            <h2 className="font-semibold text-foreground mb-3">
+                              SKILLS
+                            </h2>
                             <div className="space-y-2">
                               {skills.map((skill) => (
-                                <div key={skill.id} className="flex justify-between items-center">
+                                <div
+                                  key={skill.id}
+                                  className="flex justify-between items-center"
+                                >
                                   <span>{skill.name}</span>
-                                  <Badge variant="secondary" className="text-xs">
+                                  <Badge
+                                    variant="secondary"
+                                    className="text-xs"
+                                  >
                                     {skill.level}
                                   </Badge>
                                 </div>
