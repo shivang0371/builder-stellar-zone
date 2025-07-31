@@ -18,7 +18,8 @@ import {
   Briefcase, 
   GraduationCap, 
   Code,
-  Check
+  Check,
+  Save
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -59,10 +60,10 @@ interface Skill {
 }
 
 const steps = [
-  { id: 1, name: 'Personal Info', icon: User, description: 'Basic contact information' },
-  { id: 2, name: 'Experience', icon: Briefcase, description: 'Work history and achievements' },
+  { id: 1, name: 'Personal', icon: User, description: 'Contact details' },
+  { id: 2, name: 'Experience', icon: Briefcase, description: 'Work history' },
   { id: 3, name: 'Education', icon: GraduationCap, description: 'Academic background' },
-  { id: 4, name: 'Skills', icon: Code, description: 'Technical and soft skills' }
+  { id: 4, name: 'Skills', icon: Code, description: 'Expertise & abilities' }
 ];
 
 export default function Index() {
@@ -180,42 +181,55 @@ export default function Index() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white border-b border-gray-200 shadow-sm">
+    <div className="min-h-screen bg-gradient-to-br from-violet-50 via-white to-blue-50">
+      {/* Modern Header */}
+      <header className="bg-white/80 backdrop-blur-lg border-b border-gray-200/50 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
-                <FileText className="w-6 h-6 text-white" />
+          <div className="flex items-center justify-between h-20">
+            <div className="flex items-center space-x-4">
+              <div className="w-12 h-12 bg-gradient-to-r from-violet-600 to-blue-600 rounded-xl flex items-center justify-center shadow-lg">
+                <FileText className="w-7 h-7 text-white" />
               </div>
               <div>
-                <h1 className="text-xl font-semibold text-gray-900">Resume Builder</h1>
-                <p className="text-sm text-gray-500">Create your professional resume</p>
+                <h1 className="text-2xl font-bold bg-gradient-to-r from-violet-600 to-blue-600 bg-clip-text text-transparent">
+                  Resume Builder
+                </h1>
+                <p className="text-sm text-gray-600">Create your professional resume in minutes</p>
               </div>
             </div>
             <div className="flex items-center space-x-4">
-              <div className="text-sm text-gray-600">
-                {Math.round(getCompletionPercentage())}% Complete
+              <div className="hidden md:flex items-center space-x-2 text-sm text-gray-600">
+                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                <span>{Math.round(getCompletionPercentage())}% Complete</span>
               </div>
+              <Button variant="outline" className="hidden md:flex">
+                <Save className="w-4 h-4 mr-2" />
+                Save Draft
+              </Button>
               <Button 
                 onClick={exportResume}
                 disabled={getCompletionPercentage() < 50}
-                className="bg-blue-600 hover:bg-blue-700"
+                className="bg-gradient-to-r from-violet-600 to-blue-600 hover:from-violet-700 hover:to-blue-700 shadow-lg"
               >
                 <Download className="w-4 h-4 mr-2" />
-                Download Resume
+                Download PDF
               </Button>
             </div>
           </div>
         </div>
       </header>
 
-      {/* Progress Bar */}
-      <div className="bg-white border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <Progress value={getCompletionPercentage()} className="w-full h-2" />
-          <div className="flex justify-between mt-4">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Progress Section */}
+        <div className="mb-8">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-lg font-semibold text-gray-900">Build Your Resume</h2>
+            <div className="text-sm text-gray-500">Step {currentStep} of 4</div>
+          </div>
+          <Progress value={getCompletionPercentage()} className="w-full h-3 mb-6" />
+          
+          {/* Step Navigation */}
+          <div className="grid grid-cols-4 gap-2">
             {steps.map((step) => {
               const StepIcon = step.icon;
               const isActive = currentStep === step.id;
@@ -226,120 +240,118 @@ export default function Index() {
                   key={step.id}
                   onClick={() => setCurrentStep(step.id)}
                   className={cn(
-                    "flex flex-col items-center space-y-2 p-3 rounded-lg transition-all",
+                    "flex flex-col items-center p-4 rounded-xl transition-all duration-300",
                     isActive 
-                      ? "bg-blue-50 text-blue-600" 
+                      ? "bg-gradient-to-r from-violet-600 to-blue-600 text-white shadow-lg transform scale-105" 
                       : isComplete 
-                        ? "text-green-600 hover:bg-green-50"
-                        : "text-gray-400 hover:bg-gray-50"
+                        ? "bg-green-50 text-green-700 hover:bg-green-100"
+                        : "bg-white text-gray-500 hover:bg-gray-50 border border-gray-200"
                   )}
                 >
                   <div className={cn(
-                    "w-10 h-10 rounded-full flex items-center justify-center",
+                    "w-8 h-8 rounded-lg flex items-center justify-center mb-2",
                     isActive 
-                      ? "bg-blue-600 text-white"
+                      ? "bg-white/20"
                       : isComplete
-                        ? "bg-green-500 text-white"
-                        : "bg-gray-200 text-gray-400"
+                        ? "bg-green-100"
+                        : "bg-gray-100"
                   )}>
-                    {isComplete ? <Check className="w-5 h-5" /> : <StepIcon className="w-5 h-5" />}
+                    {isComplete && !isActive ? <Check className="w-4 h-4" /> : <StepIcon className="w-4 h-4" />}
                   </div>
                   <div className="text-center">
-                    <div className="text-sm font-medium">{step.name}</div>
-                    <div className="text-xs text-gray-500">{step.description}</div>
+                    <div className="font-medium text-sm">{step.name}</div>
+                    <div className="text-xs opacity-80">{step.description}</div>
                   </div>
                 </button>
               );
             })}
           </div>
         </div>
-      </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
           {/* Form Section */}
-          <div className="space-y-6">
+          <div className="lg:col-span-3 space-y-6">
             {currentStep === 1 && (
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center space-x-2">
-                    <User className="w-5 h-5" />
+              <Card className="border-0 shadow-xl bg-white/70 backdrop-blur-sm">
+                <CardHeader className="bg-gradient-to-r from-violet-50 to-blue-50 border-b">
+                  <CardTitle className="flex items-center space-x-3">
+                    <User className="w-6 h-6 text-violet-600" />
                     <span>Personal Information</span>
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <Label htmlFor="fullName">Full Name *</Label>
+                <CardContent className="p-8 space-y-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-2">
+                      <Label htmlFor="fullName" className="text-sm font-medium">Full Name *</Label>
                       <Input
                         id="fullName"
                         value={personalInfo.fullName}
                         onChange={(e) => setPersonalInfo({...personalInfo, fullName: e.target.value})}
-                        placeholder="John Doe"
-                        className="mt-1"
+                        placeholder="Ravi Kumar Sharma"
+                        className="h-12 border-gray-200 focus:border-violet-500 focus:ring-violet-500"
                       />
                     </div>
-                    <div>
-                      <Label htmlFor="email">Email Address *</Label>
+                    <div className="space-y-2">
+                      <Label htmlFor="email" className="text-sm font-medium">Email Address *</Label>
                       <Input
                         id="email"
                         type="email"
                         value={personalInfo.email}
                         onChange={(e) => setPersonalInfo({...personalInfo, email: e.target.value})}
-                        placeholder="john@example.com"
-                        className="mt-1"
+                        placeholder="ravi.sharma@email.com"
+                        className="h-12 border-gray-200 focus:border-violet-500 focus:ring-violet-500"
                       />
                     </div>
-                    <div>
-                      <Label htmlFor="phone">Phone Number</Label>
+                    <div className="space-y-2">
+                      <Label htmlFor="phone" className="text-sm font-medium">Phone Number</Label>
                       <Input
                         id="phone"
                         value={personalInfo.phone}
                         onChange={(e) => setPersonalInfo({...personalInfo, phone: e.target.value})}
-                        placeholder="+1 (555) 123-4567"
-                        className="mt-1"
+                        placeholder="+91 98765 43210"
+                        className="h-12 border-gray-200 focus:border-violet-500 focus:ring-violet-500"
                       />
                     </div>
-                    <div>
-                      <Label htmlFor="location">Location</Label>
+                    <div className="space-y-2">
+                      <Label htmlFor="location" className="text-sm font-medium">Location</Label>
                       <Input
                         id="location"
                         value={personalInfo.location}
                         onChange={(e) => setPersonalInfo({...personalInfo, location: e.target.value})}
-                        placeholder="New York, NY"
-                        className="mt-1"
+                        placeholder="Mumbai, Maharashtra"
+                        className="h-12 border-gray-200 focus:border-violet-500 focus:ring-violet-500"
                       />
                     </div>
-                    <div>
-                      <Label htmlFor="website">Website</Label>
+                    <div className="space-y-2">
+                      <Label htmlFor="website" className="text-sm font-medium">Portfolio Website</Label>
                       <Input
                         id="website"
                         value={personalInfo.website}
                         onChange={(e) => setPersonalInfo({...personalInfo, website: e.target.value})}
-                        placeholder="https://johndoe.com"
-                        className="mt-1"
+                        placeholder="https://ravikumar.dev"
+                        className="h-12 border-gray-200 focus:border-violet-500 focus:ring-violet-500"
                       />
                     </div>
-                    <div>
-                      <Label htmlFor="linkedin">LinkedIn</Label>
+                    <div className="space-y-2">
+                      <Label htmlFor="linkedin" className="text-sm font-medium">LinkedIn Profile</Label>
                       <Input
                         id="linkedin"
                         value={personalInfo.linkedin}
                         onChange={(e) => setPersonalInfo({...personalInfo, linkedin: e.target.value})}
-                        placeholder="linkedin.com/in/johndoe"
-                        className="mt-1"
+                        placeholder="linkedin.com/in/ravikumarsharma"
+                        className="h-12 border-gray-200 focus:border-violet-500 focus:ring-violet-500"
                       />
                     </div>
                   </div>
-                  <div>
-                    <Label htmlFor="summary">Professional Summary</Label>
+                  <div className="space-y-2">
+                    <Label htmlFor="summary" className="text-sm font-medium">Professional Summary</Label>
                     <Textarea
                       id="summary"
                       value={personalInfo.summary}
                       onChange={(e) => setPersonalInfo({...personalInfo, summary: e.target.value})}
-                      placeholder="Write a brief summary of your professional background, key achievements, and career objectives. This will be the first thing employers read."
+                      placeholder="Experienced software engineer with 5+ years in full-stack development. Passionate about creating scalable web applications and leading high-performing teams. Expertise in React, Node.js, and cloud technologies."
                       rows={4}
-                      className="mt-1"
+                      className="border-gray-200 focus:border-violet-500 focus:ring-violet-500 resize-none"
                     />
                   </div>
                 </CardContent>
@@ -347,24 +359,28 @@ export default function Index() {
             )}
 
             {currentStep === 2 && (
-              <Card>
-                <CardHeader>
+              <Card className="border-0 shadow-xl bg-white/70 backdrop-blur-sm">
+                <CardHeader className="bg-gradient-to-r from-violet-50 to-blue-50 border-b">
                   <div className="flex items-center justify-between">
-                    <CardTitle className="flex items-center space-x-2">
-                      <Briefcase className="w-5 h-5" />
+                    <CardTitle className="flex items-center space-x-3">
+                      <Briefcase className="w-6 h-6 text-violet-600" />
                       <span>Work Experience</span>
                     </CardTitle>
-                    <Button onClick={addExperience} size="sm">
+                    <Button 
+                      onClick={addExperience} 
+                      size="sm"
+                      className="bg-gradient-to-r from-violet-600 to-blue-600 hover:from-violet-700 hover:to-blue-700"
+                    >
                       <Plus className="w-4 h-4 mr-2" />
                       Add Position
                     </Button>
                   </div>
                 </CardHeader>
-                <CardContent className="space-y-6">
+                <CardContent className="p-8 space-y-6">
                   {experiences.map((exp, index) => (
-                    <div key={exp.id} className="p-4 bg-gray-50 rounded-lg border-2 border-dashed border-gray-200">
-                      <div className="flex items-center justify-between mb-4">
-                        <h3 className="font-medium text-gray-900">Position #{index + 1}</h3>
+                    <div key={exp.id} className="p-6 bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl border border-gray-200">
+                      <div className="flex items-center justify-between mb-6">
+                        <h3 className="font-semibold text-gray-900">Position #{index + 1}</h3>
                         <Button
                           variant="ghost"
                           size="sm"
@@ -374,73 +390,81 @@ export default function Index() {
                           <Trash2 className="w-4 h-4" />
                         </Button>
                       </div>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                         <div>
-                          <Label>Job Title</Label>
+                          <Label className="text-sm font-medium">Job Title</Label>
                           <Input
                             value={exp.position}
                             onChange={(e) => updateExperience(exp.id, 'position', e.target.value)}
-                            placeholder="Software Engineer"
-                            className="mt-1"
+                            placeholder="Senior Software Engineer"
+                            className="mt-1 h-11"
                           />
                         </div>
                         <div>
-                          <Label>Company</Label>
+                          <Label className="text-sm font-medium">Company</Label>
                           <Input
                             value={exp.company}
                             onChange={(e) => updateExperience(exp.id, 'company', e.target.value)}
-                            placeholder="Company Name"
-                            className="mt-1"
+                            placeholder="Tata Consultancy Services"
+                            className="mt-1 h-11"
                           />
                         </div>
                         <div>
-                          <Label>Start Date</Label>
+                          <Label className="text-sm font-medium">Start Date</Label>
                           <Input
                             type="month"
                             value={exp.startDate}
                             onChange={(e) => updateExperience(exp.id, 'startDate', e.target.value)}
-                            className="mt-1"
+                            className="mt-1 h-11"
                           />
                         </div>
                         <div>
-                          <Label>End Date</Label>
+                          <Label className="text-sm font-medium">End Date</Label>
                           <Input
                             type="month"
                             value={exp.endDate}
                             onChange={(e) => updateExperience(exp.id, 'endDate', e.target.value)}
                             disabled={exp.current}
-                            className="mt-1"
+                            className="mt-1 h-11"
                           />
-                          <div className="flex items-center space-x-2 mt-2">
+                          <div className="flex items-center space-x-2 mt-3">
                             <input
                               type="checkbox"
                               id={`current-${exp.id}`}
                               checked={exp.current}
                               onChange={(e) => updateExperience(exp.id, 'current', e.target.checked)}
-                              className="rounded"
+                              className="rounded border-gray-300 text-violet-600 focus:ring-violet-500"
                             />
-                            <Label htmlFor={`current-${exp.id}`} className="text-sm">Currently employed here</Label>
+                            <Label htmlFor={`current-${exp.id}`} className="text-sm">Currently working here</Label>
                           </div>
                         </div>
                       </div>
                       <div>
-                        <Label>Job Description & Achievements</Label>
+                        <Label className="text-sm font-medium">Job Description & Key Achievements</Label>
                         <Textarea
                           value={exp.description}
                           onChange={(e) => updateExperience(exp.id, 'description', e.target.value)}
-                          placeholder="• Developed and maintained web applications using React and Node.js&#10;• Led a team of 3 developers and improved code quality by 40%&#10;• Implemented new features that increased user engagement by 25%"
+                          placeholder="• Led development of customer portal using React and Node.js, serving 50,000+ users&#10;• Improved application performance by 40% through code optimization and caching strategies&#10;• Mentored junior developers and established coding best practices for the team"
                           rows={4}
-                          className="mt-1"
+                          className="mt-1 resize-none"
                         />
                       </div>
                     </div>
                   ))}
                   {experiences.length === 0 && (
-                    <div className="text-center py-12 bg-gray-50 rounded-lg border-2 border-dashed border-gray-200">
-                      <Briefcase className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                      <h3 className="text-lg font-medium text-gray-900 mb-2">Add Your Work Experience</h3>
-                      <p className="text-gray-500 mb-4">Start building your resume by adding your work history</p>
-                      <Button onClick={addExperience}>Add Your First Position</Button>
+                    <div className="text-center py-16 bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl border-2 border-dashed border-gray-300">
+                      <Briefcase className="w-16 h-16 text-gray-400 mx-auto mb-6" />
+                      <h3 className="text-xl font-semibold text-gray-900 mb-3">Add Your Work Experience</h3>
+                      <p className="text-gray-600 mb-6 max-w-md mx-auto">
+                        Showcase your professional journey and key achievements that make you stand out
+                      </p>
+                      <Button 
+                        onClick={addExperience}
+                        className="bg-gradient-to-r from-violet-600 to-blue-600 hover:from-violet-700 hover:to-blue-700"
+                      >
+                        <Plus className="w-4 h-4 mr-2" />
+                        Add Your First Position
+                      </Button>
                     </div>
                   )}
                 </CardContent>
@@ -448,24 +472,28 @@ export default function Index() {
             )}
 
             {currentStep === 3 && (
-              <Card>
-                <CardHeader>
+              <Card className="border-0 shadow-xl bg-white/70 backdrop-blur-sm">
+                <CardHeader className="bg-gradient-to-r from-violet-50 to-blue-50 border-b">
                   <div className="flex items-center justify-between">
-                    <CardTitle className="flex items-center space-x-2">
-                      <GraduationCap className="w-5 h-5" />
+                    <CardTitle className="flex items-center space-x-3">
+                      <GraduationCap className="w-6 h-6 text-violet-600" />
                       <span>Education</span>
                     </CardTitle>
-                    <Button onClick={addEducation} size="sm">
+                    <Button 
+                      onClick={addEducation} 
+                      size="sm"
+                      className="bg-gradient-to-r from-violet-600 to-blue-600 hover:from-violet-700 hover:to-blue-700"
+                    >
                       <Plus className="w-4 h-4 mr-2" />
                       Add Education
                     </Button>
                   </div>
                 </CardHeader>
-                <CardContent className="space-y-6">
+                <CardContent className="p-8 space-y-6">
                   {education.map((edu, index) => (
-                    <div key={edu.id} className="p-4 bg-gray-50 rounded-lg border-2 border-dashed border-gray-200">
-                      <div className="flex items-center justify-between mb-4">
-                        <h3 className="font-medium text-gray-900">Education #{index + 1}</h3>
+                    <div key={edu.id} className="p-6 bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl border border-gray-200">
+                      <div className="flex items-center justify-between mb-6">
+                        <h3 className="font-semibold text-gray-900">Education #{index + 1}</h3>
                         <Button
                           variant="ghost"
                           size="sm"
@@ -477,68 +505,76 @@ export default function Index() {
                       </div>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                          <Label>School/University</Label>
+                          <Label className="text-sm font-medium">Institution</Label>
                           <Input
                             value={edu.school}
                             onChange={(e) => updateEducation(edu.id, 'school', e.target.value)}
-                            placeholder="University of California"
-                            className="mt-1"
+                            placeholder="Indian Institute of Technology, Delhi"
+                            className="mt-1 h-11"
                           />
                         </div>
                         <div>
-                          <Label>Degree</Label>
+                          <Label className="text-sm font-medium">Degree</Label>
                           <Input
                             value={edu.degree}
                             onChange={(e) => updateEducation(edu.id, 'degree', e.target.value)}
-                            placeholder="Bachelor of Science"
-                            className="mt-1"
+                            placeholder="Bachelor of Technology"
+                            className="mt-1 h-11"
                           />
                         </div>
                         <div>
-                          <Label>Field of Study</Label>
+                          <Label className="text-sm font-medium">Field of Study</Label>
                           <Input
                             value={edu.field}
                             onChange={(e) => updateEducation(edu.id, 'field', e.target.value)}
-                            placeholder="Computer Science"
-                            className="mt-1"
+                            placeholder="Computer Science and Engineering"
+                            className="mt-1 h-11"
                           />
                         </div>
                         <div>
-                          <Label>GPA (Optional)</Label>
+                          <Label className="text-sm font-medium">CGPA/Percentage</Label>
                           <Input
                             value={edu.gpa}
                             onChange={(e) => updateEducation(edu.id, 'gpa', e.target.value)}
-                            placeholder="3.8/4.0"
-                            className="mt-1"
+                            placeholder="8.5/10 CGPA"
+                            className="mt-1 h-11"
                           />
                         </div>
                         <div>
-                          <Label>Start Date</Label>
+                          <Label className="text-sm font-medium">Start Date</Label>
                           <Input
                             type="month"
                             value={edu.startDate}
                             onChange={(e) => updateEducation(edu.id, 'startDate', e.target.value)}
-                            className="mt-1"
+                            className="mt-1 h-11"
                           />
                         </div>
                         <div>
-                          <Label>Graduation Date</Label>
+                          <Label className="text-sm font-medium">Graduation Date</Label>
                           <Input
                             type="month"
                             value={edu.endDate}
                             onChange={(e) => updateEducation(edu.id, 'endDate', e.target.value)}
-                            className="mt-1"
+                            className="mt-1 h-11"
                           />
                         </div>
                       </div>
                     </div>
                   ))}
                   {education.length === 0 && (
-                    <div className="text-center py-12 bg-gray-50 rounded-lg border-2 border-dashed border-gray-200">
-                      <GraduationCap className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                      <h3 className="text-lg font-medium text-gray-900 mb-2">Add Your Education</h3>
-                      <p className="text-gray-500 mb-4">Include your academic background and qualifications</p>
-                      <Button onClick={addEducation}>Add Education</Button>
+                    <div className="text-center py-16 bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl border-2 border-dashed border-gray-300">
+                      <GraduationCap className="w-16 h-16 text-gray-400 mx-auto mb-6" />
+                      <h3 className="text-xl font-semibold text-gray-900 mb-3">Add Your Education</h3>
+                      <p className="text-gray-600 mb-6 max-w-md mx-auto">
+                        Include your academic qualifications and achievements
+                      </p>
+                      <Button 
+                        onClick={addEducation}
+                        className="bg-gradient-to-r from-violet-600 to-blue-600 hover:from-violet-700 hover:to-blue-700"
+                      >
+                        <Plus className="w-4 h-4 mr-2" />
+                        Add Education
+                      </Button>
                     </div>
                   )}
                 </CardContent>
@@ -546,33 +582,38 @@ export default function Index() {
             )}
 
             {currentStep === 4 && (
-              <Card>
-                <CardHeader>
+              <Card className="border-0 shadow-xl bg-white/70 backdrop-blur-sm">
+                <CardHeader className="bg-gradient-to-r from-violet-50 to-blue-50 border-b">
                   <div className="flex items-center justify-between">
-                    <CardTitle className="flex items-center space-x-2">
-                      <Code className="w-5 h-5" />
+                    <CardTitle className="flex items-center space-x-3">
+                      <Code className="w-6 h-6 text-violet-600" />
                       <span>Skills & Expertise</span>
                     </CardTitle>
-                    <Button onClick={addSkill} size="sm">
+                    <Button 
+                      onClick={addSkill} 
+                      size="sm"
+                      className="bg-gradient-to-r from-violet-600 to-blue-600 hover:from-violet-700 hover:to-blue-700"
+                    >
                       <Plus className="w-4 h-4 mr-2" />
                       Add Skill
                     </Button>
                   </div>
                 </CardHeader>
-                <CardContent className="space-y-4">
+                <CardContent className="p-8 space-y-4">
                   {skills.map((skill, index) => (
-                    <div key={skill.id} className="flex items-center space-x-4 p-3 bg-gray-50 rounded-lg">
+                    <div key={skill.id} className="flex items-center space-x-4 p-4 bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl">
                       <div className="flex-1">
                         <Input
                           value={skill.name}
                           onChange={(e) => updateSkill(skill.id, 'name', e.target.value)}
-                          placeholder="e.g., Python, Project Management, Adobe Photoshop"
+                          placeholder="React.js, Python, Machine Learning, Project Management"
+                          className="h-11"
                         />
                       </div>
                       <select
                         value={skill.level}
                         onChange={(e) => updateSkill(skill.id, 'level', e.target.value)}
-                        className="px-3 py-2 border border-gray-300 rounded-md bg-white min-w-[120px]"
+                        className="px-4 py-3 border border-gray-300 rounded-lg bg-white min-w-[140px] focus:border-violet-500 focus:ring-violet-500"
                       >
                         <option value="Beginner">Beginner</option>
                         <option value="Intermediate">Intermediate</option>
@@ -590,11 +631,19 @@ export default function Index() {
                     </div>
                   ))}
                   {skills.length === 0 && (
-                    <div className="text-center py-12 bg-gray-50 rounded-lg border-2 border-dashed border-gray-200">
-                      <Code className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                      <h3 className="text-lg font-medium text-gray-900 mb-2">Add Your Skills</h3>
-                      <p className="text-gray-500 mb-4">List your technical skills, languages, and expertise</p>
-                      <Button onClick={addSkill}>Add Skills</Button>
+                    <div className="text-center py-16 bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl border-2 border-dashed border-gray-300">
+                      <Code className="w-16 h-16 text-gray-400 mx-auto mb-6" />
+                      <h3 className="text-xl font-semibold text-gray-900 mb-3">Add Your Skills</h3>
+                      <p className="text-gray-600 mb-6 max-w-md mx-auto">
+                        Highlight your technical skills, programming languages, and professional expertise
+                      </p>
+                      <Button 
+                        onClick={addSkill}
+                        className="bg-gradient-to-r from-violet-600 to-blue-600 hover:from-violet-700 hover:to-blue-700"
+                      >
+                        <Plus className="w-4 h-4 mr-2" />
+                        Add Skills
+                      </Button>
                     </div>
                   )}
                 </CardContent>
@@ -607,6 +656,7 @@ export default function Index() {
                 variant="outline"
                 onClick={prevStep}
                 disabled={currentStep === 1}
+                className="px-8 py-3"
               >
                 <ChevronLeft className="w-4 h-4 mr-2" />
                 Previous
@@ -614,6 +664,7 @@ export default function Index() {
               <Button
                 onClick={nextStep}
                 disabled={currentStep === 4}
+                className="px-8 py-3 bg-gradient-to-r from-violet-600 to-blue-600 hover:from-violet-700 hover:to-blue-700"
               >
                 Next
                 <ChevronRight className="w-4 h-4 ml-2" />
@@ -622,125 +673,147 @@ export default function Index() {
           </div>
 
           {/* Resume Preview */}
-          <div className="lg:sticky lg:top-8">
-            <Card className="shadow-lg">
-              <CardHeader className="bg-gray-50 border-b">
-                <CardTitle className="flex items-center justify-between">
-                  <span className="flex items-center space-x-2">
-                    <FileText className="w-5 h-5" />
-                    <span>Your Resume</span>
-                  </span>
-                  <Badge variant="secondary" className="text-xs">
-                    Live Preview
-                  </Badge>
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="p-8 bg-white" id="resume-preview">
-                <div className="space-y-6 text-sm max-h-[600px] overflow-y-auto">
-                  {/* Header */}
-                  <div className="text-center border-b pb-6">
-                    <h1 className="text-3xl font-bold text-gray-900 mb-2">
-                      {personalInfo.fullName || 'Your Full Name'}
-                    </h1>
-                    <div className="text-gray-600 space-y-1">
-                      {personalInfo.email && <div>{personalInfo.email}</div>}
-                      {personalInfo.phone && <div>{personalInfo.phone}</div>}
-                      {personalInfo.location && <div>{personalInfo.location}</div>}
-                      <div className="flex justify-center space-x-4 mt-2">
-                        {personalInfo.website && <div>{personalInfo.website}</div>}
-                        {personalInfo.linkedin && <div>{personalInfo.linkedin}</div>}
+          <div className="lg:col-span-2">
+            <div className="sticky top-8">
+              <Card className="border-0 shadow-2xl bg-white">
+                <CardHeader className="bg-gradient-to-r from-violet-600 to-blue-600 text-white">
+                  <CardTitle className="flex items-center justify-between">
+                    <span className="flex items-center space-x-2">
+                      <FileText className="w-5 h-5" />
+                      <span>Resume Preview</span>
+                    </span>
+                    <Badge variant="secondary" className="bg-white/20 text-white border-white/30">
+                      Live Preview
+                    </Badge>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="p-8" id="resume-preview">
+                  <div className="space-y-6 text-sm max-h-[700px] overflow-y-auto">
+                    {/* Header */}
+                    <div className="text-center pb-6 border-b-2 border-gray-200">
+                      <h1 className="text-3xl font-bold text-gray-900 mb-3">
+                        {personalInfo.fullName || 'Your Full Name'}
+                      </h1>
+                      <div className="text-gray-600 space-y-1">
+                        {personalInfo.email && <div className="text-base">{personalInfo.email}</div>}
+                        {personalInfo.phone && <div>{personalInfo.phone}</div>}
+                        {personalInfo.location && <div>{personalInfo.location}</div>}
+                        <div className="flex justify-center space-x-6 mt-3 text-sm">
+                          {personalInfo.website && <div className="text-blue-600">{personalInfo.website}</div>}
+                          {personalInfo.linkedin && <div className="text-blue-600">{personalInfo.linkedin}</div>}
+                        </div>
                       </div>
                     </div>
+
+                    {/* Professional Summary */}
+                    {personalInfo.summary && (
+                      <div>
+                        <h2 className="text-lg font-bold text-gray-900 mb-3 uppercase tracking-wider border-b border-gray-300 pb-1">
+                          Professional Summary
+                        </h2>
+                        <p className="text-gray-700 leading-relaxed">{personalInfo.summary}</p>
+                      </div>
+                    )}
+
+                    {/* Experience */}
+                    {experiences.length > 0 && (
+                      <div>
+                        <h2 className="text-lg font-bold text-gray-900 mb-4 uppercase tracking-wider border-b border-gray-300 pb-1">
+                          Professional Experience
+                        </h2>
+                        <div className="space-y-6">
+                          {experiences.map((exp) => (
+                            <div key={exp.id}>
+                              <div className="flex justify-between items-start mb-2">
+                                <div>
+                                  <h3 className="font-bold text-gray-900 text-base">{exp.position || 'Position Title'}</h3>
+                                  <div className="text-blue-600 font-semibold">{exp.company || 'Company Name'}</div>
+                                </div>
+                                <div className="text-gray-600 text-sm font-medium">
+                                  {exp.startDate} - {exp.current ? 'Present' : exp.endDate}
+                                </div>
+                              </div>
+                              {exp.description && (
+                                <div className="text-gray-700 whitespace-pre-line leading-relaxed mt-2">
+                                  {exp.description}
+                                </div>
+                              )}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Education */}
+                    {education.length > 0 && (
+                      <div>
+                        <h2 className="text-lg font-bold text-gray-900 mb-4 uppercase tracking-wider border-b border-gray-300 pb-1">
+                          Education
+                        </h2>
+                        <div className="space-y-4">
+                          {education.map((edu) => (
+                            <div key={edu.id}>
+                              <div className="flex justify-between items-start">
+                                <div>
+                                  <h3 className="font-bold text-gray-900">
+                                    {edu.degree} {edu.field && `in ${edu.field}`}
+                                  </h3>
+                                  <div className="text-blue-600 font-semibold">{edu.school}</div>
+                                  {edu.gpa && <div className="text-gray-600 text-sm mt-1">CGPA: {edu.gpa}</div>}
+                                </div>
+                                <div className="text-gray-600 text-sm font-medium">
+                                  {edu.startDate} - {edu.endDate}
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Skills */}
+                    {skills.length > 0 && (
+                      <div>
+                        <h2 className="text-lg font-bold text-gray-900 mb-4 uppercase tracking-wider border-b border-gray-300 pb-1">
+                          Skills & Expertise
+                        </h2>
+                        <div className="grid grid-cols-1 gap-2">
+                          {skills.map((skill) => (
+                            <div key={skill.id} className="flex justify-between items-center py-1">
+                              <span className="text-gray-700 font-medium">{skill.name}</span>
+                              <Badge 
+                                variant="outline" 
+                                className={cn(
+                                  "text-xs font-medium",
+                                  skill.level === 'Expert' && "bg-green-50 text-green-700 border-green-200",
+                                  skill.level === 'Advanced' && "bg-blue-50 text-blue-700 border-blue-200",
+                                  skill.level === 'Intermediate' && "bg-yellow-50 text-yellow-700 border-yellow-200",
+                                  skill.level === 'Beginner' && "bg-gray-50 text-gray-700 border-gray-200"
+                                )}
+                              >
+                                {skill.level}
+                              </Badge>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Empty State */}
+                    {!personalInfo.fullName && experiences.length === 0 && education.length === 0 && skills.length === 0 && (
+                      <div className="text-center py-16 text-gray-400">
+                        <FileText className="w-20 h-20 mx-auto mb-6 text-gray-300" />
+                        <h3 className="text-xl font-semibold mb-3 text-gray-500">Your Resume Preview</h3>
+                        <p className="max-w-md mx-auto leading-relaxed">
+                          Start building your professional resume by filling out your personal information. 
+                          Your resume will appear here as you add content.
+                        </p>
+                      </div>
+                    )}
                   </div>
-
-                  {/* Professional Summary */}
-                  {personalInfo.summary && (
-                    <div>
-                      <h2 className="text-lg font-semibold text-gray-900 mb-3 uppercase tracking-wide">Professional Summary</h2>
-                      <p className="text-gray-700 leading-relaxed">{personalInfo.summary}</p>
-                    </div>
-                  )}
-
-                  {/* Experience */}
-                  {experiences.length > 0 && (
-                    <div>
-                      <h2 className="text-lg font-semibold text-gray-900 mb-4 uppercase tracking-wide">Professional Experience</h2>
-                      <div className="space-y-6">
-                        {experiences.map((exp) => (
-                          <div key={exp.id}>
-                            <div className="flex justify-between items-start mb-2">
-                              <div>
-                                <h3 className="font-semibold text-gray-900">{exp.position || 'Position Title'}</h3>
-                                <div className="text-blue-600 font-medium">{exp.company || 'Company Name'}</div>
-                              </div>
-                              <div className="text-gray-500 text-sm">
-                                {exp.startDate} - {exp.current ? 'Present' : exp.endDate}
-                              </div>
-                            </div>
-                            {exp.description && (
-                              <div className="text-gray-700 whitespace-pre-line leading-relaxed">
-                                {exp.description}
-                              </div>
-                            )}
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Education */}
-                  {education.length > 0 && (
-                    <div>
-                      <h2 className="text-lg font-semibold text-gray-900 mb-4 uppercase tracking-wide">Education</h2>
-                      <div className="space-y-4">
-                        {education.map((edu) => (
-                          <div key={edu.id}>
-                            <div className="flex justify-between items-start">
-                              <div>
-                                <h3 className="font-semibold text-gray-900">
-                                  {edu.degree} {edu.field && `in ${edu.field}`}
-                                </h3>
-                                <div className="text-blue-600 font-medium">{edu.school}</div>
-                                {edu.gpa && <div className="text-gray-600 text-sm">GPA: {edu.gpa}</div>}
-                              </div>
-                              <div className="text-gray-500 text-sm">
-                                {edu.startDate} - {edu.endDate}
-                              </div>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Skills */}
-                  {skills.length > 0 && (
-                    <div>
-                      <h2 className="text-lg font-semibold text-gray-900 mb-4 uppercase tracking-wide">Skills & Expertise</h2>
-                      <div className="grid grid-cols-2 gap-3">
-                        {skills.map((skill) => (
-                          <div key={skill.id} className="flex justify-between items-center">
-                            <span className="text-gray-700">{skill.name}</span>
-                            <Badge variant="outline" className="text-xs">
-                              {skill.level}
-                            </Badge>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Empty State */}
-                  {!personalInfo.fullName && experiences.length === 0 && education.length === 0 && skills.length === 0 && (
-                    <div className="text-center py-12 text-gray-400">
-                      <FileText className="w-16 h-16 mx-auto mb-4 text-gray-300" />
-                      <h3 className="text-lg font-medium mb-2">Your resume will appear here</h3>
-                      <p>Start by filling out your personal information</p>
-                    </div>
-                  )}
-                </div>
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
+            </div>
           </div>
         </div>
       </div>
